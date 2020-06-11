@@ -51,11 +51,21 @@ const VideoPlayer = ({match, history, location}) => {
   }, [history, location.autoplay, match.params, state.activeVideo.id, state.videos]);
 
   const nightModeCallback = () => {
-
+    setState(prevState => ({
+      ...prevState,
+      nightMode: !prevState.nightMode
+    }));
   }
 
   const endCallback = () => {
+    const {activeVideo} = match.params;
+    const currentVideoIndex = state.videos.findIndex(video => video.id === activeVideo);
+    const nextVideo = currentVideoIndex === state.videos.length - 1 ? 0 : currentVideoIndex + 1;
 
+    history.push({
+      pathname: `/${state.videos[nextVideo].id}`,
+      autoplay: false
+    });
   }
 
   const progressCallback = () => {
